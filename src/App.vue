@@ -1,7 +1,7 @@
 <script setup>
 </script>
 <template>
-  <div class="text-red-500">
-    Hello world!
+  <div class="text-red-500">Hello world
+    
   </div>
 </template>
