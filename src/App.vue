@@ -2,7 +2,7 @@
 </script>
 
 <template>
-  <div class="text-yellow-600">
-    hello world
-  </div>
-</template>
+ <div class="text-red-900">
+  Hello world!
+ </div> 
+  </template>
