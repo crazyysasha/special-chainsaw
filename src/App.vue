@@ -2,6 +2,6 @@
 </script>
 <template>
   <div class="text-red-500">
-    Hello world
+    Hello world!
   </div>
 </template>
