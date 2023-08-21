@@ -1,18 +1,47 @@
 <script setup>
 import { computed, ref } from 'vue';
 
-const expression = ref('4*4');
+const expression = ref('');
 
 
-const computedExpression = computed(() => eval(expression.value));
+const isEqualsRequested = ref(false);
+
+const computedExpression = computed(() => {
+    try {
+        return eval(expression.value.replace(/(\+$)|(\/$)|(\-$)|(\*$)/g, (val) => ''));
+
+    } catch (e) {
+        return '';
+    }
+});
+
+const onClickedSymbol = (symbol) => {
+    if (`${symbol}`.search(/(\*)|(\-)|(\/)|(\+)/gi)) {
+        return expression.value += symbol;
+    }
+
+    if (/(\+$)|(\/$)|(\-$)|(\*$)/g.exec(expression.value)) {
+        expression.value = expression.value.replace(/(\+$)|(\/$)|(\-$)|(\*$)/g, (val) => symbol);
+    } else {
+        expression.value += symbol;
+    }
+}
+const onEqualsRequested = () => {
+    isEqualsRequested.value = true;
+}
 
 </script>
 
 <template>
-    <div class="bg-secondary rounded-5xl p-8 py-10 max-w-max">
-        <div class="h-60">
-            {{ expression }} = {{ computedExpression }} 
-         </div>
+    <div class="bg-secondary rounded-5xl p-8 py-10 max-w-max" @keyup="onClickedSymbol($event.key)">
+        <div class="h-60 flex flex-col justify-end pb-10 items-end">
+            <div class="text-[#818181] text-2xl"
+                v-html="expression.replaceAll(/(\*)|(\-)|(\/)|(\+)/gi, (value) => `<span class='text-[#109DFF]'>${value}</span>`)">
+            </div>
+            <div v-if="isEqualsRequested" class="text-white text-5xl font-medium">
+                = {{ computedExpression }}
+            </div>
+        </div>
         <div class="grid grid-cols-4 grid-rows-5 gap-5">
             <button class="block h-16 rounded-2xl col-span-1 p-5 bg-[#616161]">Ac</button>
             <button class="h-16 rounded-2xl col-span-1 p-5 bg-[#616161] flex justify-center items-center">
@@ -22,25 +51,30 @@ const computedExpression = computed(() => eval(expression.value));
                         fill="#A5A5A5" />
                 </svg>
             </button>
-            <button class="block h-16 rounded-2xl col-span-1 p-5 bg-primary aspect-square">/</button>
-            <button class="block h-16 rounded-2xl col-span-1 p-5 bg-primary aspect-square">*</button>
-            <button class="block h-16 rounded-2xl col-span-1 p-5 bg-[#303136]">7</button>
-            <button class="block h-16 rounded-2xl col-span-1 p-5 bg-[#303136]">8</button>
-            <button class="block h-16 rounded-2xl col-span-1 p-5 bg-[#303136]">9</button>
-            <button class="block h-16 rounded-2xl col-span-1 p-5 bg-primary aspect-square">-</button>
+            <button class="block h-16 rounded-2xl col-span-1 p-5 bg-primary aspect-square"
+                @click="onClickedSymbol('/')">/</button>
+            <button class="block h-16 rounded-2xl col-span-1 p-5 bg-primary aspect-square"
+                @click="onClickedSymbol('*')">*</button>
+            <button class="block h-16 rounded-2xl col-span-1 p-5 bg-[#303136]" @click="onClickedSymbol(7)">7</button>
+            <button class="block h-16 rounded-2xl col-span-1 p-5 bg-[#303136]" @click="onClickedSymbol(8)">8</button>
+            <button class="block h-16 rounded-2xl col-span-1 p-5 bg-[#303136]" @click="onClickedSymbol(9)">9</button>
+            <button class="block h-16 rounded-2xl col-span-1 p-5 bg-primary aspect-square"
+                @click="onClickedSymbol('-')">-</button>
 
-            <button class="block h-16 rounded-2xl col-span-1 p-5 bg-[#303136]">4</button>
-            <button class="block h-16 rounded-2xl col-span-1 p-5 bg-[#303136]">5</button>
-            <button class="block h-16 rounded-2xl col-span-1 p-5 bg-[#303136]">6</button>
-            <button class="block h-16 rounded-2xl col-span-1 p-5 bg-primary aspect-square">+</button>
+            <button class="block h-16 rounded-2xl col-span-1 p-5 bg-[#303136]" @click="onClickedSymbol(4)">4</button>
+            <button class="block h-16 rounded-2xl col-span-1 p-5 bg-[#303136]" @click="onClickedSymbol(5)">5</button>
+            <button class="block h-16 rounded-2xl col-span-1 p-5 bg-[#303136]" @click="onClickedSymbol(6)">6</button>
+            <button class="block h-16 rounded-2xl col-span-1 p-5 bg-primary aspect-square"
+                @click="onClickedSymbol('+')">+</button>
 
-            <button class="block h-16 rounded-2xl col-span-1 p-5 bg-[#303136]">1</button>
-            <button class="block h-16 rounded-2xl col-span-1 p-5 bg-[#303136]">2</button>
-            <button class="block h-16 rounded-2xl col-span-1 p-5 bg-[#303136]">3</button>
-            <button class="block rounded-2xl col-span-1 row-span-2 p-5 bg-primary">=</button>
+            <button class="block h-16 rounded-2xl col-span-1 p-5 bg-[#303136]" @click="onClickedSymbol(1)">1</button>
+            <button class="block h-16 rounded-2xl col-span-1 p-5 bg-[#303136]" @click="onClickedSymbol(2)">2</button>
+            <button class="block h-16 rounded-2xl col-span-1 p-5 bg-[#303136]" @click="onClickedSymbol(3)">3</button>
+            <button class="block rounded-2xl col-span-1 row-span-2 p-5 bg-primary" @click="onEqualsRequested">=</button>
 
-            <button class="block h-16 rounded-2xl col-span-2 p-5 bg-[#303136]">0</button>
-            <button class="block h-16 rounded-2xl col-span-1 p-5 bg-[#303136] aspect-square">.</button>
+            <button class="block h-16 rounded-2xl col-span-2 p-5 bg-[#303136]" @click="onClickedSymbol(0)">0</button>
+            <button class="block h-16 rounded-2xl col-span-1 p-5 bg-[#303136] aspect-square"
+                @click="onClickedSymbol('.')">.</button>
         </div>
     </div>
 </template>
