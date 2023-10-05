@@ -1,26 +1,18 @@
 <script setup>
 import { ref, watch } from 'vue';
-import TheCalculator from './components/TheCalculator.vue';
-const text = ref();
-
-watch(text, (newValue, oldValue) => {
-
-  console.log(newValue, oldValue);
-});
-
-const x = ref();
-const y = ref();
-watch([x, y], ([newX, newY], [oldX, oldY]) => {
-
-});
+import TableHead from './components/table/TableHead.vue'
+import TableBody from './components/table/TableBody.vue'
+const users = ref([
+  { id: 1, name: 'Ozodbek', surname: 'Mamayoqubov', birthday: '2012-07-18', },
+  { id: 2, name: 'Sasha', surname: 'Raimov', birthday: '1999-04-07', },
+]);
 </script>
 
 <template>
   <div>
-    <!-- <TheCalculator>
-    </TheCalculator> -->
-    <input type="text" class="border p-2 rounded-lg border-green-500" v-model="text">
-    <p>{{ text }}</p>
+    <table>
+      <TableHead></TableHead>
+      <TableBody :data="users"></TableBody>
+    </table>
   </div>
 </template>
-
