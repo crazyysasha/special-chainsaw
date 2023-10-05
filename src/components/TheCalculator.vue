@@ -1,5 +1,5 @@
 <script setup>
-import { computed, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 
 const expression = ref('');
 
@@ -53,7 +53,9 @@ const onBackspaceRequested = () => {
     expression.value = expression.value.slice(0, -1);
 }
 const calc = ref();
-
+onMounted(() => {
+    calc.value.focus()
+});
 </script>
 
 <template>
