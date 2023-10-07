@@ -3,6 +3,7 @@
 import TheButton from './components/TheButton.vue';
 import TheClock from './components/TheClock.vue';
 import TheAlarm from "./components/TheAlarm.vue";
+import XOGame from './components/XOGame.vue';
 import { ref } from 'vue';
 const time = ref();
 const nextSecondHandler = (t) => {
@@ -13,16 +14,18 @@ const nextSecondHandler = (t) => {
 <template>
   <div>
 
-    <TheButton content="register" @on-hover="console.log($event)">
+    <!-- <TheButton content="register" @on-hover="console.log($event)">
     </TheButton>
     <TheButton content="login"></TheButton>
     <TheButton content="logout"></TheButton>
-    <!-- <TheCalculator>
-    </TheCalculator> -->
+ <TheCalculator>
+    </TheCalculator> 
     <TheClock @on-next-second="nextSecondHandler"></TheClock>
 
     <TheAlarm :current-time="time">
-    </TheAlarm>
+    </TheAlarm> -->
+
+    <XOGame></XOGame>
   </div>
 </template>
 
