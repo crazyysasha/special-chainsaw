@@ -5,10 +5,12 @@ const players = reactive({
     p1: {
         key: 'x',
         results: [],
+        win: false,
     },
     p2: {
         key: 'o',
         results: [],
+        win: false,
     },
 });
 
@@ -40,16 +42,35 @@ const onPlayerclick = (cell) => {
     }
 
 }
+const wins = [
+    [1, 2, 3],
+    [4, 5, 6],
+    [7, 8, 9],
+    [1, 4, 7],
+    [2, 5, 8],
+    [3, 6, 9],
+    [1, 5, 9],
+    [3, 5, 7],
+];
 
 const checkResults = () => {
-    const wins = [[1, 2, 3], [4, 5, 6], [7, 8, 9]];
-    console.log(wins.find((win) => {
-
-        return currentPlayer.value.results.every((e) => {
-            console.log(e,);
-            return win.includes(e);
-        });;
-    }));
+    if (currentPlayer.value.results.length < 3) {
+        return;
+    }
+    const result = wins.some(win => {
+        let isContained = true;
+        for (const w of win) {
+            console.log(w);
+            if (!currentPlayer.value.results.includes(`${w}`)) {
+                isContained = false;
+                break;
+            }
+        }
+        return isContained;
+    });
+    if (result) {
+        currentPlayer.value.win = true;
+    }
 
 } 
 </script>
@@ -58,8 +79,13 @@ const checkResults = () => {
         <div v-for="(data, cell) in board"
             class="col-span-1 border border-green-500 aspect-square flex items-center justify-center text-4xl"
             @click="onPlayerclick(cell)">
-            {{ cell }} {{ data }}
+             {{ data }}
         </div>
+        <div v-for="(player, key) in players">
 
+            <div v-if="player.win">
+                {{ key }} won!
+            </div>
+        </div>
     </div>
 </template>
