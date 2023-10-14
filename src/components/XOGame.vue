@@ -1,11 +1,13 @@
 <script setup>
-import { reactive, ref } from 'vue';
+import { onMounted, reactive, ref } from 'vue';
 
 const players = reactive({
     p1: {
         key: 'x',
         results: [],
         win: false,
+
+
     },
     p2: {
         key: 'o',
@@ -27,7 +29,15 @@ const board = reactive({
     9: null,
 });
 
-const onPlayerclick = (cell) => {
+const onPlayerclick = async (cell) => {
+    console.log(JSON.stringify({ cell, player: currentPlayer.value.key }));
+    console.log(await (await fetch('http://192.168.100.193:81/turn', {
+        method: "POST",
+        body: JSON.stringify({ cell, player: currentPlayer.value.key }),
+        headers: {
+            'Content-Type': 'application/json'
+        },
+    })).json())
     if (!!board[cell]) {
         return;
     }
@@ -72,14 +82,18 @@ const checkResults = () => {
         currentPlayer.value.win = true;
     }
 
-} 
+}
+
+onMounted(async () => {
+    console.log(await (await fetch('http://192.168.100.193:81/turn',)).json());
+});
 </script>
 <template>
     <div class="grid grid-cols-3 h-60 w-60">
         <div v-for="(data, cell) in board"
             class="col-span-1 border border-green-500 aspect-square flex items-center justify-center text-4xl"
             @click="onPlayerclick(cell)">
-             {{ data }}
+            {{ data }}
         </div>
         <div v-for="(player, key) in players">
 

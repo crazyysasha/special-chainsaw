@@ -3,9 +3,9 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "vite",
+    "dev": "vite --port=80 --host",
     "build": "vite build",
-    "preview": "vite preview"
+    "preview": "vite preview --port=80 --host"
   },
   "dependencies": {
     "express": "^4.18.2",
